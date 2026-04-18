@@ -134,25 +134,33 @@ Provides deep contextual reasoning. It ensures that synonyms or distinct phrases
 \textbf{COSINE SIMILARITY MATCHING}
 The foundational operation to compare an Alumni Skill ($S$) against a Syllabus Topic ($T$) within a Course ($C$).
 
-$ \text{Similarity}(S, T) = \frac{E(S) \cdot E(T)}{||E(S)|| \times ||E(T)||} $
+\[
+\text{Similarity}(S, T) = \frac{E(S) \cdot E(T)}{\|E(S)\| \times \|E(T)\|}
+\]
 
 Where $E(S)$ is the BERT vector of the extracted skill, $E(T)$ is the BERT vector of the syllabus topic. Result range is [-1, 1], where values closer to 1 indicate exact semantic matches.
 
 \textbf{SKILL GAP INDEX (SGI)}
 For a specific skill $S$ reported by alumni, what is the gap in the current course $C$?
 First, we find the best-matching topic in the course:
-$ \text{Best Match}(S, C) = \max \text{Similarity}(S, T_i) \text{ for } T_i \in C $
+\[
+\text{Best Match}(S, C) = \max_{T_i \in C} \; \text{Similarity}(S, T_i)
+\]
 Then, the Skill Gap Index is computed as:
-$ SGI(S, C) = 1.0 - \text{Best Match}(S, C) $
+\[
+SGI(S, C) = 1.0 - \text{Best Match}(S, C)
+\]
 Note: A higher SGI indicates a wider gap.
 
 \textbf{COURSE RELEVANCE SCORE (CRS)}
 An aggregate score from 0.0 to 1.0 defining how relevant a specific course is to industry demands.
 Case A: Faculty Module Enabled (CO Data Available): 
-$ CRS = (w1 \times R_{\text{alumni}}) + (w2 \times M_{\text{skill}}) + (w3 \times A_{\text{CO}}) $
+\[
+CRS = (w_1 \times R_{\text{alumni}}) + (w_2 \times M_{\text{skill}}) + (w_3 \times A_{\text{CO}})
+\]
 Where:
 \begin{itemize}
-    \item $w1, w2, w3$ = Institution-configured weights where $w1+w2+w3 = 1.0$
+    \item $w_1, w_2, w_3$ = Institution-configured weights where $w_1 + w_2 + w_3 = 1.0$
     \item $R_{\text{alumni}}$ = Average alumni rating normalized to [0,1]
     \item $M_{\text{skill}}$ = Average cosine similarity across targeted skills mapped to the course.
     \item $A_{\text{CO}}$ = Average internal course outcome attainment percentage.
@@ -160,7 +168,9 @@ Where:
 
 \subsection{RECOMMENDATION ENGINE LOGIC}
 When a skill gap is identified, the system evaluates the importance and urgency of addressing that gap using a priority score.
-$ \text{Priority Score} = SGI \times P_{\text{mention}} \times W_{\text{recency}} $
+\[
+\text{Priority Score} = SGI \times P_{\text{mention}} \times W_{\text{recency}}
+\]
 Where $P_{\text{mention}}$ is Alumni Mention Percentage, and $W_{\text{recency}}$ is Recency Multiplier (1.5 if emerging trend, 1.0 otherwise).
 
 \textbf{CLASSIFICATION RULES}
@@ -172,7 +182,19 @@ The AI flags syllabus topics applying the following deterministic thresholds:
 \end{enumerate}
 
 \subsection{SYLLABUS DIFF GENERATION}
-During the AI revision process, recommendations need to be inserted correctly back into the syllabus structure. The Diff Generator then builds a JSON object marking original strings in red (REDUCE/DELETE) and proposed new strings in green (ADD), paired directly with evidence metrics (Pmention and Wrecency) to present the Diff view to the administrator.
+During the AI revision process, recommendations (Type ADD/REDUCE/MODIFY) need to be inserted correctly back into the syllabus structure.
+
+\textbf{Topic Insertion Algorithm (For ADDs):} Let $R_{\text{topic}}$ be the recommended industry skill. To determine which Unit it belongs to:
+\begin{enumerate}
+    \item Compute cosine similarity between $E(R_{\text{topic}})$ and $E(\text{Unit\_Header}_i)$ for all units $i$ in the course.
+    \item Assign the new topics to the unit where the similarity is maximized:
+\[
+\max_i \; \text{similarity}(R_{\text{topic}}, \text{Unit\_Header}_i)
+\]
+    \item If $\max(\text{similarity}) < 0.30$, propose appending a completely new unit.
+\end{enumerate}
+
+The Diff Generator then builds a JSON object marking original strings in red (REDUCE/DELETE) and proposed new strings in green (ADD), paired directly with evidence metrics ($P_{\text{mention}}$ and $W_{\text{recency}}$) to present the Diff view to the administrator.
 
 \section{Design Specification}
 
