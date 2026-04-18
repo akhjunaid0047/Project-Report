@@ -249,10 +249,14 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
 
 \subsection{DATA DICTIONARY}
 
+% Uniform cell padding for all Data Dictionary tables
+{\renewcommand{\arraystretch}{1.5}%
+\setlength{\tabcolsep}{8pt}%
+
 \begin{table}[h]
     \centering
     \caption{User Schema}
-    \begin{tabular}{|l|l|p{5cm}|}
+    \begin{tabularx}{\textwidth}{|p{0.28\textwidth}|p{0.28\textwidth}|X|}
         \hline
         \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
         id & UUID PK & \\ \hline
@@ -263,51 +267,69 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
         full\_name & VARCHAR & \\ \hline
         is\_active & BOOLEAN & Default true \\ \hline
         created\_at & TIMESTAMP & \\ \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \begin{table}[h]
     \centering
     \caption{Department Schema}
-    \begin{tabular}{|l|l|p{5cm}|}
+    \begin{tabularx}{\textwidth}{|p{0.28\textwidth}|p{0.28\textwidth}|X|}
         \hline
         \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
         id & UUID PK & \\ \hline
         name & VARCHAR & e.g., "Computer Science Engineering" \\ \hline
         code & VARCHAR & e.g., "CSE" \\ \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
-\begin{table}[h]
-    \centering
-    \caption{Alumni Survey Form Schema}
-    \begin{tabular}{|l|l|p{5cm}|}
-        \hline
-        \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
-        id & UUID PK & \\ \hline
-        user\_id & FK $\rightarrow$ users & \\ \hline
-        gender & ENUM & \\ \hline
-        degree\_program & VARCHAR & \\ \hline
-        department & VARCHAR & \\ \hline
-        graduation\_year & INTEGER & \\ \hline
-        employment\_status & ENUM & \\ \hline
-        job\_role\_designation & VARCHAR & Nullable \\ \hline
-        company\_name & VARCHAR & Nullable \\ \hline
-        industry\_domain & VARCHAR & Nullable \\ \hline
-        work\_mode & ENUM & \\ \hline
-        job\_responsibilities & TEXT & NLP source; Nullable \\ \hline
-        tools\_software & TEXT & NLP source; Nullable \\ \hline
-        skills\_helped\_land\_job & TEXT & NLP source; Nullable \\ \hline
-        course\_relevance\_rating & INTEGER & 1-5 \\ \hline
-        unused\_subjects & TEXT & NLP source; Nullable \\ \hline
-        skills\_missing\_from\_curriculum & TEXT & NLP source; Nullable \\ \hline
-    \end{tabular}
-\end{table}
+\begin{longtable}{|p{0.28\textwidth}|p{0.28\textwidth}|p{0.34\textwidth}|}
+    \caption{Alumni Survey Form Schema} \\
+    \hline
+    \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
+    \endfirsthead
+    \multicolumn{3}{c}{\tablename\ \thetable\ -- \textit{Continued from previous page}} \\
+    \hline
+    \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
+    \endhead
+    \hline \multicolumn{3}{r}{\textit{Continued on next page}} \\
+    \endfoot
+    \hline
+    \endlastfoot
+    id & UUID PK & \\ \hline
+    user\_id & FK $\rightarrow$ users & \\ \hline
+    gender & ENUM & Male, Female, Other, Prefer not to say \\ \hline
+    degree\_program & VARCHAR & \\ \hline
+    department & VARCHAR & \\ \hline
+    graduation\_year & INTEGER & \\ \hline
+    employment\_status & ENUM & Employed, Higher Studies, Unemployed, Self-employed, Freelance \\ \hline
+    job\_role\_designation & VARCHAR & Nullable \\ \hline
+    company\_name & VARCHAR & Nullable \\ \hline
+    industry\_domain & VARCHAR & Nullable \\ \hline
+    work\_mode & ENUM & Remote, On-site, Hybrid; Nullable \\ \hline
+    job\_responsibilities & TEXT & NLP source; Nullable \\ \hline
+    tools\_software & TEXT & NLP source; Nullable \\ \hline
+    skills\_helped\_land\_job & TEXT & NLP source; Nullable \\ \hline
+    course\_relevance\_rating & INTEGER & 1--5 \\ \hline
+    unused\_subjects & TEXT & NLP source; Nullable \\ \hline
+    skills\_missing\_\allowbreak from\_curriculum & TEXT & NLP source; Nullable \\ \hline
+    has\_changed\_jobs & BOOLEAN & \\ \hline
+    previous\_designations & TEXT & Nullable \\ \hline
+    skills\_acquired\_\allowbreak after\_graduation & TEXT & NLP source; Nullable \\ \hline
+    certifications\_completed & TEXT & NLP source; Nullable \\ \hline
+    career\_growth\_satisfaction & INTEGER & 1--5 \\ \hline
+    placement\_preparation & TEXT & Nullable \\ \hline
+    helpful\_platforms & TEXT & Nullable \\ \hline
+    placement\_training\_helped & ENUM & Yes, Partially, No \\ \hline
+    job\_search\_difficulties & TEXT & Nullable \\ \hline
+    suggestions\_for\_improvement & TEXT & NLP source; Nullable \\ \hline
+    submitted\_at & TIMESTAMP & \\ \hline
+    last\_updated & TIMESTAMP & \\ \hline
+\end{longtable}
 
 \begin{table}[h]
     \centering
     \caption{Alumni Skills Schema}
-    \begin{tabular}{|l|l|p{5cm}|}
+    \begin{tabularx}{\textwidth}{|p{0.28\textwidth}|p{0.28\textwidth}|X|}
         \hline
         \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
         id & UUID PK & \\ \hline
@@ -315,28 +337,28 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
         skill\_name & VARCHAR & Normalized form \\ \hline
         skill\_category & VARCHAR & Programming, Tool, Framework, Domain, Soft Skill \\ \hline
         source\_field & VARCHAR & Which survey field it came from \\ \hline
-        is\_post\_graduation & BOOLEAN & True if from skills\_acquired\_after\_graduation \\ \hline
+        is\_post\_graduation & BOOLEAN & True if from skills\_acquired\_\allowbreak after\_graduation \\ \hline
         extracted\_at & TIMESTAMP & \\ \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \begin{table}[h]
     \centering
     \caption{Faculty Schema}
-    \begin{tabular}{|l|l|p{5cm}|}
+    \begin{tabularx}{\textwidth}{|p{0.28\textwidth}|p{0.28\textwidth}|X|}
         \hline
         \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
         id & UUID PK & \\ \hline
         user\_id & FK $\rightarrow$ users & \\ \hline
         designation & VARCHAR & \\ \hline
         specialization & VARCHAR & \\ \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \begin{table}[h]
     \centering
     \caption{CO Attainment Reports Schema}
-    \begin{tabular}{|l|l|p{5cm}|}
+    \begin{tabularx}{\textwidth}{|p{0.28\textwidth}|p{0.28\textwidth}|X|}
         \hline
         \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
         id & UUID PK & \\ \hline
@@ -350,13 +372,13 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
         final\_attainment\_pct & FLOAT & \\ \hline
         remarks & TEXT & Nullable \\ \hline
         submitted\_at & TIMESTAMP & \\ \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \begin{table}[h]
     \centering
     \caption{Faculty Feedback Schema}
-    \begin{tabular}{|l|l|p{5cm}|}
+    \begin{tabularx}{\textwidth}{|p{0.28\textwidth}|p{0.28\textwidth}|X|}
         \hline
         \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
         id & UUID PK & \\ \hline
@@ -367,13 +389,13 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
         student\_difficulties & TEXT & Nullable \\ \hline
         general\_comments & TEXT & Nullable \\ \hline
         submitted\_at & TIMESTAMP & \\ \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \begin{table}[h]
     \centering
     \caption{Courses Schema}
-    \begin{tabular}{|l|l|p{5cm}|}
+    \begin{tabularx}{\textwidth}{|p{0.28\textwidth}|p{0.28\textwidth}|X|}
         \hline
         \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
         id & UUID PK & \\ \hline
@@ -383,13 +405,13 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
         semester & INTEGER & \\ \hline
         credits & INTEGER & \\ \hline
         is\_active & BOOLEAN & \\ \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \begin{table}[h]
     \centering
     \caption{Syllabus Documents Schema}
-    \begin{tabular}{|l|l|p{5cm}|}
+    \begin{tabularx}{\textwidth}{|p{0.28\textwidth}|p{0.28\textwidth}|X|}
         \hline
         \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
         id & UUID PK & \\ \hline
@@ -401,13 +423,13 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
         is\_processed & BOOLEAN & Has NLP been run? \\ \hline
         uploaded\_by & FK $\rightarrow$ users & Admin who uploaded \\ \hline
         uploaded\_at & TIMESTAMP & \\ \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \begin{table}[h]
     \centering
     \caption{Institution Settings Schema}
-    \begin{tabular}{|l|l|p{5cm}|}
+    \begin{tabularx}{\textwidth}{|p{0.28\textwidth}|p{0.28\textwidth}|X|}
         \hline
         \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
         id & INTEGER PK & Single row \\ \hline
@@ -418,13 +440,13 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
         gap\_threshold & FLOAT & Min similarity to not be flagged; default 0.40 \\ \hline
         min\_alumni\_mention\_pct & FLOAT & Min \% for skill to qualify for gap analysis; default 0.10 \\ \hline
         updated\_at & TIMESTAMP & \\ \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \begin{table}[h]
     \centering
     \caption{Skill Gap Results Schema}
-    \begin{tabular}{|l|l|p{5cm}|}
+    \begin{tabularx}{\textwidth}{|p{0.28\textwidth}|p{0.28\textwidth}|X|}
         \hline
         \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
         id & UUID PK & \\ \hline
@@ -438,13 +460,13 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
         gap\_flag & BOOLEAN & True = high demand, low coverage \\ \hline
         analytics\_run\_id & FK $\rightarrow$ analytics\_runs & \\ \hline
         computed\_at & TIMESTAMP & \\ \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \begin{table}[h]
     \centering
     \caption{Course Relevance Scores Schema}
-    \begin{tabular}{|l|l|p{5cm}|}
+    \begin{tabularx}{\textwidth}{|p{0.28\textwidth}|p{0.28\textwidth}|X|}
         \hline
         \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
         id & UUID PK & \\ \hline
@@ -454,13 +476,13 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
         skill\_match\_score & FLOAT & From cosine similarity avg \\ \hline
         co\_attainment\_avg & FLOAT & NULL if faculty module disabled \\ \hline
         analytics\_run\_id & FK $\rightarrow$ analytics\_runs & \\ \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \begin{table}[h]
     \centering
     \caption{Curriculum Recommendations Schema}
-    \begin{tabular}{|l|l|p{5cm}|}
+    \begin{tabularx}{\textwidth}{|p{0.28\textwidth}|p{0.28\textwidth}|X|}
         \hline
         \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
         id & UUID PK & \\ \hline
@@ -473,13 +495,13 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
         included\_in\_revision & BOOLEAN & Was it applied to a revised syllabus PDF? \\ \hline
         analytics\_run\_id & FK $\rightarrow$ analytics\_runs & \\ \hline
         generated\_at & TIMESTAMP & \\ \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \begin{table}[h]
     \centering
     \caption{Syllabus Revisions Schema}
-    \begin{tabular}{|l|l|p{5cm}|}
+    \begin{tabularx}{\textwidth}{|p{0.28\textwidth}|p{0.28\textwidth}|X|}
         \hline
         \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
         id & UUID PK & \\ \hline
@@ -492,13 +514,13 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
         rejected\_changes\_count & INTEGER & \\ \hline
         created\_by & FK $\rightarrow$ users & Admin who triggered revision \\ \hline
         finalized\_at & TIMESTAMP & When admin downloaded/finalized \\ \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
 
 \begin{table}[h]
     \centering
     \caption{Analytics Runs Schema}
-    \begin{tabular}{|l|l|p{5cm}|}
+    \begin{tabularx}{\textwidth}{|p{0.28\textwidth}|p{0.28\textwidth}|X|}
         \hline
         \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
         id & UUID PK & \\ \hline
@@ -509,7 +531,9 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
         alumni\_count & INTEGER & Snapshot of data volume at run time \\ \hline
         faculty\_data\_included & BOOLEAN & Whether CO data was used in this run \\ \hline
         error\_log & TEXT & Nullable \\ \hline
-    \end{tabular}
+    \end{tabularx}
 \end{table}
+
+} % end arraystretch / tabcolsep group
 
 %% ----------------------------------------------------------------
