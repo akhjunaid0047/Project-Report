@@ -1,0 +1,62 @@
+%% ----------------------------------------------------------------
+%% Introduction.tex
+%% ----------------------------------------------------------------
+\chapter{Introduction}
+\label{Chapter:Introduction}
+
+The rapid and ever changing face of education is defined by rapidly changing technologies, industry expectations, and employability imperatives. Today, more than ever, the academics are expected to keep pace with an appropriate curriculum-market fit. All this will ensure student success, improvement in program outcomes, and cater to the demands brought out by various OBE, NAAC, and NBA.
+
+Despite this, most institutions still rely on manual outdated processes to track alumni career progress, evaluate course effectiveness, and refine their curriculum. Feedback cycles are slow, and often lack insights that are structured and data-driven. As a result, course content becomes outdated, skill gaps widen, and graduates may enter the industry with skills that do not fully meet the industry requirements.
+
+This makes the development of an AI-driven academic analytics system indispensable.
+
+\section{Education Analytics \& Outcome-Based Education(OBE)}
+In the contemporary academic landscape, education extends beyond the delivery of chapters or the completion of a prescribed syllabus. It now emphasizes a deeper understanding of learners and the development of competencies required for their future environments. Education Analytics supports institutions in advancing this objective by converting routine academic data into actionable insights. Rather than evaluating students solely on the basis of marks or examination outcomes, analytics enables a comprehensive view of their learning processes, the challenges they encounter, and the skills they meaningfully acquire.
+
+Outcome-Based Education (OBE) adds another important perspective by shifting the focus from “What did we teach?” to “What did the student learn and how well can they apply it?” or “What would actually help them embark on their careers more smoothly?” This approach emphasizes clear learning outcomes, real world skill development, and measurable results, ensuring that students gain the abilities demanded by modern industries.
+
+Combined together, Education Analytics and OBE create a more compassionate, student-centered system—one that listens to learners, learns from alumni experiences, and values faculty feedback. Together, they help institutions evolve continuously, keeping the curriculum current, meaningful, and aligned with the needs of society. EduFeedback carries this philosophy forward by applying technology to strengthen insight, refine decisions, and cultivate an educational environment that grows in step with its learners.
+
+
+\section{Objectives of EduFeedback AI}
+
+\subsection{Primary Objective}
+To develop an AI-driven analytics framework that integrates alumni career data, teacher feedback, and syllabus content to evaluate curriculum relevance and generate data-driven recommendations for continuous curriculum improvement.
+
+\subsection{Secondary Objectives}
+\begin{itemize}
+    \item \textbf{Objective 1}: To design a comprehensive alumni career progress collection system. Develop a structured system to collect alumni job roles, skills utilized in professional environment, perceived course relevance, overall satisfaction and personal suggestions forming a real-world dataset for academic evaluation.
+    \item \textbf{Objective 2}: To standardize teacher feedback and CO attainment data. Implement a system for faculty to submit Course Outcome (CO) attainment reports and feedback, enabling consistent, analyzable academic performance metrics.
+    \item \textbf{Objective 3}: To apply NLP techniques for extracting key concepts from curriculum documents. Use TF-IDF, BERT embeddings, and text-processing methods to represent path analysis.
+    \item \textbf{Objective 4}: To extract and model industry-required job skills from alumni responses. Perform skill extraction, classification, and clustering from alumni free-text inputs to create an empirical skill repository representing current market demands.
+    \item \textbf{Objective 5}: To develop a curriculum–job skill matching model. Compare syllabus-derived topics with industry skill sets using similarity scoring and compute alignment metrics, including a Skill Gap Index and Course Relevance Score.
+    \item \textbf{Objective 6}: To design an AI-based recommendation engine for curriculum enhancement. Provide evidence-based suggestions for introducing new topics, updating outdated modules, and reducing low-impact content to strengthen curriculum–industry alignment.
+    \item \textbf{Objective 7}: To construct an interactive visualization dashboard for decision makers. Create a decision-support interface that presents analytics through charts, heatmaps, matrices, and scorecards to assist HoDs, IQAC, NAAC/NBA evaluators, and curriculum review committees.
+    \item \textbf{Objective 8}: To validate the proposed system through pilot testing. Conduct experimental validation with alumni and faculty data to assess system accuracy, usability, and its effectiveness in supporting curriculum revision processes.
+\end{itemize}
+
+\section{Challenges in Curriculum Relevancy Statement}
+Ensuring that a curriculum stays meaningful in a world that changes every day is becoming increasingly difficult for educational institutions. Industries transform quickly, new tools and technologies appear almost overnight, and the skills employers look for today may be very different from what they needed just a few years ago. Because of this constant shift, academic courses often struggle to keep up, leaving students well-versed in theory but not fully prepared for the realities of modern workplaces.
+
+A major part of this challenge comes from the absence of regular, structured feedback from the people who understand the system best—faculty who teach the courses and alumni who experience how useful those courses are in real jobs. When institutions rely on occasional surveys or manual feedback methods, many important insights get missed. As a result, outdated topics continue unchanged, emerging skill needs go unnoticed, and opportunities to improve the curriculum are delayed. This makes it clear that institutions need a more thoughtful, continuous, and evidence-based way to stay connected with the evolving world outside the classroom.
+
+Additionally, curriculum committees must balance academic depth with industry practicalities, making it hard to decide what to include, update, or remove. All these factors create a gap between what students learn and what employers expect, highlighting the urgent need for intelligent tools like EduFeedback AI that can analyze data, track trends, and help institutions maintain curriculum relevancy in a more dynamic and evidence-based way.
+
+\section{Methodologies}
+The methodologies used in EduFeedback AI consists of multi stage processes such as data collection, preprocessing, feature extraction, skill matching, recommendation engine and visualization.
+
+\begin{itemize}
+    \item \textbf{Data Collection}: Alumni career outcomes, teacher CO-attainment data, and syllabus documents were collected. Alumni responses included job roles, tools and technologies used, perceived relevance of courses, and personal feedback. Teacher inputs included CO completion percentages. Curriculum documents were collected in text format for NLP-based topic extraction.
+    \item \textbf{Preprocessing}: All textual data underwent preprocessing to ensure consistency and noise removal. Standard NLP cleaning operations were applied, including:
+    \begin{itemize}
+        \item Tokenization
+        \item Stopword elimination
+        \item Lemmatization
+        \item Punctuation and numeric filtering
+    \end{itemize}
+    These steps produced clean text required for vectorization and feature extraction.
+    
+    \item \textbf{Feature Extraction}: Two approaches were used: TF-IDF to identify statistically important terms and BERT-based embeddings to extract contextual semantic representations. Alumni skills, job descriptions, and syllabus topics were converted into vectors suitable for running similarity search.
+    
+    \item \textbf{Curriculum–Skill Matching}: Cosine similarity was applied to measure the similarity between the syllabus topics and industry required skills. A Skill Gap Index was computed to calculate the difference. Furthermore, a weighted scoring model combined alumni relevance scores, skill-match scores, and CO completion values to compute a Course Relevance Score.
+\end{itemize}

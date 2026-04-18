@@ -1,0 +1,264 @@
+%% ----------------------------------------------------------------
+%% Project.tex
+%% ---------------------------------------------------------------- 
+\documentclass{ecsproject}     % Use the Project Style
+\graphicspath{{../Figures/}}   % Location of your graphics files
+\hypersetup{colorlinks=true}   % Set to false for black/white printing
+%% ----------------------------------------------------------------
+
+\begin{document}
+\frontmatter
+\pagenumbering{roman}
+
+% =========================
+% FRONT TITLE PAGE
+% =========================
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+
+\vspace*{-1.2cm}
+
+% ---- University Logo ----
+\includegraphics[width=0.60\textwidth]{figures/tiu.png}\par
+\vspace{0.25cm}
+
+% ---- Project Title ----
+{\Large\bfseries
+EduFeedBack AI: Post-Career Analytics \& Curriculum Refinement\par}
+
+\vspace{0.25cm}
+
+{\normalsize\bfseries 8th Semester Project Report}\\
+
+\vspace{0.2cm}
+
+% ---- Submission ----
+{\small submitted to}\par
+{\normalsize\bfseries Techno India University, West Bengal}\par
+
+\vspace{0.2cm}
+
+{\small In partial fulfilment of the requirements}\\
+{\small for the award of the degree of}\\
+
+\vspace{0.15cm}
+
+{\normalsize\bfseries Bachelor of Technology}\\
+
+\vspace{0.1cm}
+
+{\small in}\\
+{\normalsize\bfseries Computer Science \& Engineering}\\
+
+\vspace{0.15cm}
+
+% ---- Students ----
+{\small by}\par
+\vspace{0.1cm}
+
+\begin{tabular}{c}
+\textbf{Khandakar Aryanul Haque (Roll No. 221001001282)}\\
+\textbf{Navita Verma (Roll No. 221001001315)}\\
+\textbf{Junaid Akhter (Roll No. 221001001316)}\\
+\textbf{Ruchita Mishra (Roll No. 221001001324)}\\
+\textbf{Aryan Hela (Roll No. 221001001332)}
+\end{tabular}
+
+\vspace{0.2cm}
+
+% ---- Supervisor ----
+{\small Under the guidance of}\par
+{\normalsize\bfseries Dr. Soumi Paul}\par
+
+\vspace{0.35cm}
+
+% ---- Footer ----
+{\small Department of Computer Science \& Engineering}\par
+{\small\bfseries TECHNO INDIA UNIVERSITY, WEST BENGAL}\par
+
+\vspace{0.1cm}
+
+{\small April 2026}\par
+
+\vfill
+
+{\small © 2026, Techno India University. All rights reserved.}
+
+\end{titlepage}
+
+% =========================
+% DEDICATION PAGE
+% =========================
+% Omitted unless requested, as none was found in the PDF.
+
+% =========================
+% AUTHOR DECLARATION
+% =========================
+\cleardoublepage
+\begin{declaration}
+We hereby declare that the project report entitled \textbf{``Post-Career Analytics \& Curriculum Refinement''} is an authentic record of our own work carried out at the \textbf{Department of Computer Science and Engineering, Techno India University, West Bengal}, during the \textbf{8th semester of the academic year 2025--2026} under the supervision of \textbf{Dr. Soumi Paul}, Assistant Professor.
+
+We further declare that the matter embodied in this project report has not been submitted by us for the award of any other degree or diploma of this or any other Institute/University. All the information have been
+obtained and presented in accordance with academic rules and ethical conduct.
+We also declare that, as required by these rules and conduct, we have fully cited and referenced all materials and results that are not original to this work.
+
+\vspace{1.2em}
+
+\noindent
+\textbf{Place:} EM-4/1, Sector V, Bidhannagar, Kolkata, West Bengal -- 700091
+\par\vspace{0.1cm}
+\textbf{Date:} April 2026
+
+\vspace{0.7em}
+
+\noindent
+\textbf{Signatures:}
+
+\vspace{0.1em}
+
+\noindent
+\begin{center}
+\begin{tabular}{p{0.45\textwidth} p{0.45\textwidth}}
+\textbf{Signature:} \rule{4.5cm}{0.4pt} &
+\textbf{Signature:} \rule{4.5cm}{0.4pt} \\[-0.2em]
+\textbf{Name: Khandakar Aryanul Haque} &
+\textbf{Name: Navita Verma} \\[-0.2em]
+\textbf{Roll No: 221001001282} &
+\textbf{Roll No: 221001001315} \\[1.2em]
+
+\textbf{Signature:} \rule{4.5cm}{0.4pt} &
+\textbf{Signature:} \rule{4.5cm}{0.4pt} \\[-0.2em]
+\textbf{Name: Junaid Akhter} &
+\textbf{Name: Ruchita Mishra} \\[-0.2em]
+\textbf{Roll No: 221001001316} &
+\textbf{Roll No: 221001001324} \\[1.2em]
+
+\textbf{Signature:} \rule{4.5cm}{0.4pt} \\
+\textbf{Name: Aryan Hela} \\[-0.2em]
+\textbf{Roll No: 221001001332}
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+
+\end{declaration}
+
+% =========================
+% CERTIFICATE OF RECOMMENDATION
+% =========================
+\cleardoublepage
+\begin{certificate}
+This is to certify that the Dissertation Report entitled \textbf{``Post-Career Analytics \& Curriculum Refinement''} submitted by \textbf{JUNAID AKHTER}, \textbf{NAVITA VERMA}, \textbf{ARYAN HELA}, \textbf{RUCHITA MISHRA}, and \textbf{KHANDAKAR ARYANUL HAQUE} to Techno India University, Kolkata, India, is a record of bonafide Project work carried out by them under my supervision and guidance and is worthy of consideration for the award of the degree of \textbf{Bachelor of Technology (B.Tech)} in \textbf{Computer Science \& Engineering}.
+
+\vspace{1.0cm}
+
+\begin{flushleft}
+\underline{\makebox[2.5in]{}} \\
+\textbf{Dr. Soumi Paul}, \\
+Project Supervisor, \\
+Assistant Professor, Department of Computer Science and Engineering, \\
+Techno India University, Kolkata, West Bengal, India. \\
+\end{flushleft}
+
+\vspace{1.0cm}
+\begin{flushleft}
+    Approved By:    
+\end{flushleft}
+
+\vspace{1.0cm}
+
+\begin{flushleft}
+    \underline{\makebox[2.5in]{}} \\
+    \textbf{Dr. Soumi Paul}, \\
+    HoD / Reviewer, Department of Computer Science and Engineering, \\
+    Techno India University, Kolkata, West Bengal, India. \\    
+\end{flushleft}
+\end{certificate}
+
+
+% =========================
+% AUTHOR ACKNOWLEDGEMENT
+% =========================
+\cleardoublepage
+\begin{acknowledgement}
+We would like to first thank our thesis supervisor \textbf{Dr. Soumi Paul}, Assistant Professor, CSE Dept, TIU. She helped us whenever we ran into a trouble spot or had a question about our research or writing. 
+
+We take this opportunity to express gratitude to all of the Department faculty members for their help and support. 
+
+We also thank our parents for the unceasing encouragement, support and attention and also sense of gratitude to one and all, who directly or indirectly, have bestowed their hand in this thesis.
+\end{acknowledgement}
+
+% =========================
+% LIST OF PUBLICATION (OPTIONAL)
+% =========================
+
+% =========================
+% THESIS ABSTRACT
+% =========================
+%\cleardoublepage
+\begin{abstract}
+Modern education curriculum struggles to keep up with the pace of their rapidly growing domains. Curriculum relevance improvement is necessary for Outcome-Based Education (OBE), NAAC, and NBA accreditation frameworks. However, academic institutions face challenges in collecting alumni feedback, measuring real world skill relevance, and refining curriculum content with the emerging sector priorities.
+
+This project, EduFeedback AI, develops a machine learning based support system that collects alumni career outcomes, analyzes course effectiveness through teacher feedback, maps job skill requirements to curriculum topics, and generates curriculum refinement suggestions. The methodologies include TF-IDF and BERT embeddings to extract key concepts from the curriculum syllabus documents. The application finally generates a visualization dashboard for better assessment.
+
+The AI-generated curriculum insights significantly support academic decision making and help institutions maintain industry relevance.
+
+\textbf{Keywords:}
+\begin{itemize}
+    \item Alumni Career Refinement
+    \item NLP-Based Skill Mapping
+    \item Outcome-Based Education (OBE)
+    \item AI Recommendation Engine
+\end{itemize}
+\end{abstract}
+
+% =========================
+% TABLE OF CONTENTS
+% =========================
+\cleardoublepage
+\tableofcontents
+
+% =========================
+% LIST OF FIGURES
+% =========================
+\cleardoublepage
+\listoffigures
+
+% =========================
+% LIST OF TABLES
+% =========================
+\cleardoublepage
+\listoftables
+
+% =========================
+% MAIN CONTENTS OF THESIS
+% =========================
+\mainmatter
+
+\include{chapters/Chapter_1}
+\include{chapters/Chapter_2}
+\include{chapters/Chapter_3}
+\include{chapters/Chapter_4}
+\include{chapters/Chapter_5}
+\include{chapters/Chapter_6}
+
+% =========================
+% BACK CONTENTS OF THESIS
+% =========================
+\backmatter
+
+% =========================
+% BIBLIOGRAPHY
+% =========================
+\bibliographystyle{ieeetr}
+\nocite{*}
+\bibliography{bib/references}
+
+% =========================
+% APPENDIX [OPTIONAL]
+% =========================
+\appendix
+
+\end{document}
+%% ----------------------------------------------------------------

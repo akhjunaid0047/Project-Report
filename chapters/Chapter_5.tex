@@ -1,0 +1,22 @@
+%% ----------------------------------------------------------------
+%% Chapter_5.tex
+%% ----------------------------------------------------------------
+\chapter{Implementation Issues}
+\label{Chapter:Implementation}
+
+The implementation of the EduFeedback AI platform involves several technical, structural, and operational complexities. While the layered system architecture provides a robust framework, the integration of distributed AI components, data processing pipelines, and user-facing interfaces introduces the following implementation challenges:
+
+\section{Document Parsing and Data Unavailability}
+A major hurdle in the pipeline is the reliable extraction of text and structural data from legacy Syllabus PDFs. Syllabi provided by various departments often lack a standardized layout, utilizing complex nested tables, multi-column formats, or even scanned images instead of digital text. While pdfplumber is utilized for text and bounding-box extraction, inconsistent document formatting leads to misclassified unit boundaries or truncated learning objectives. Ensuring the syllabus parser correctly links hierarchical topics requires robust error handling and fallback heuristics.
+
+\section{NLP Semantic Nuances and Taxonomy Limitations}
+Extracting skills accurately from alumni free-text inputs poses a challenge due to informal language, abbreviations, and overlapping terminologies. For instance, distinguishing between "Java" and "JavaScript," or mapping "Deep Learning" to an umbrella "Machine Learning" term without losing granularity required careful tuning of the skill\_taxonomy.json and spaCy NER rules. Furthermore, the Cosine Similarity calculation, while enhanced by the all-mpnet-base-v2 BERT model, occasionally suffers from high-dimensional noise when comparing highly technical sub-topics against broad academic descriptions.
+
+\section{System Performance and Asynchronous Computing}
+The computational cost of generating 768-dimensional BERT embeddings for hundreds of syllabus topics and correlating them against thousands of alumni-reported skills is intensive. Performing these operations synchronously would result in API timeouts and a degraded user experience. The implementation relies heavily on Celery and Redis to decouple these heavy workloads. Structuring the task queues to optimize memory usage (specifically managing the 36GB memory constraints of the BERT model) and avoiding database deadlocks during batched embedding writes proved to be a critical deployment issue.
+
+\section{Cold Start Problem and Data Sparsity}
+The accuracy of the Course Relevance Score and Skill Gap Index directly correlates with the volume of alumni data. During the initial phases of deployment, departments with limited alumni survey participation suffer from the "cold start" problem, where the recommendation engine lacks statistically significant evidence to flag low-ROI topics or emerging skills. The architecture gracefully degrades to rely on raw feature similarities, but the actionable intelligence is inherently constrained by the available data pool.
+
+\section{Institutional Adoption and Subjectivity}
+From an operational perspective, adjusting academic curricula mathematically using AI can face resistance from faculty members. The system was meticulously designed to keep the Faculty Module "opt-in" and to ensure the AI acts as an assistive tool (via the Diff Checker) rather than an autonomous decision-maker. Reconciling quantitative skill gaps with subjective faculty course outcome (CO) attainments requires careful weighting algorithms to prevent the AI from recommending overly radical, unaccredited changes.
