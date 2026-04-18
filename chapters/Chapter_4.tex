@@ -5,15 +5,15 @@
 \label{Chapter:Description}
 
 \section{SOFTWARE MODEL}
-EduFeedback AI follows a layered client–server architecture to make the system easier to manage, scale, and improve over time. The overall design is divided into four logical layers, with each layer handling a specific role in the system. This clear separation of responsibilities helps keep the system well-organized and reduces dependency between components. As a result, updates or improvements can be made to one part of the system without disrupting others, which supports long-term maintenance and future expansion.
+EduFeedback AI follows a layered client-server architecture to make the system easier to manage, scale, and improve over time. The overall design is divided into four logical layers, with each layer handling a specific role in the system. This clear separation of responsibilities helps keep the system well-organized and reduces dependency between components. As a result, updates or improvements can be made to one part of the system without disrupting others, which supports long-term maintenance and future expansion.
 
 The application layer is the part of the system that handles most of the working logic. It connects what the user does on the website with what happens in the backend. This layer checks who the user is, what role they have, and whether they are allowed to access a particular feature. It also makes sure that the data sent by users is valid before moving it further. When alumni submit surveys or faculty members provide course-related feedback, this layer manages how the information flows through the system. Keeping these rules in one place helps in making small changes later without affecting the full system. The data analytics layer is mainly responsible for understanding the information collected from users. Most of the feedback received is in text form and cannot be directly used for analysis. This layer processes such data and looks for useful patterns and meanings in it. It compares alumni feedback, job-related information, and course details to find how well the curriculum matches industry needs. Based on this comparison, the system highlights areas where skills are lacking and subjects that need improvement. This layer is kept flexible so that better analysis methods or new data sources can be added in the future if required.
 
-The data analytics layer encapsulates all intelligence-driven components of the system. This layer integrates Natural Language Processing and machine learning models to analyze unstructured and semi-structured data. NLP techniques such as TF-IDF and BERT-based embeddings are employed to extract meaningful features from alumni feedback, job descriptions, and curriculum documents. Similarity computation algorithms quantify curriculum–industry alignment, while scoring models compute metrics such as the Skill Gap Index and Course Relevance Score. This layer is designed to be extensible, allowing future inclusion of advanced predictive models and external labor market datasets.
+The data analytics layer encapsulates all intelligence-driven components of the system. This layer integrates Natural Language Processing and machine learning models to analyze unstructured and semi-structured data. NLP techniques such as TF-IDF and BERT-based embeddings are employed to extract meaningful features from alumni feedback, job descriptions, and curriculum documents. Similarity computation algorithms quantify curriculum-industry alignment, while scoring models compute metrics such as the Skill Gap Index and Course Relevance Score. This layer is designed to be extensible, allowing future inclusion of advanced predictive models and external labor market datasets.
 
 The data layer functions as the persistent storage foundation of the system. A relational database management system is used to store structured entities including user profiles, alumni career data, skill usage records, course relevance ratings, CO attainment reports, and generated analytics results. Data normalization and relational integrity constraints are enforced to ensure consistency, accuracy, and efficient query processing. This layer supports both transactional operations and analytical queries required by the dashboard and reporting components.
 
-Overall, the layered client–server architecture enables EduFeedback AI to achieve high cohesion within modules and low coupling across layers. Such an architectural design enhances system scalability, facilitates maintenance and future upgrades, and ensures reliable performance when handling growing volumes of academic and alumni data. This design choice aligns with best practices in enterprise software development and supports the long-term adaptability of the proposed system.
+Overall, the layered client-server architecture enables EduFeedback AI to achieve high cohesion within modules and low coupling across layers. Such an architectural design enhances system scalability, facilitates maintenance and future upgrades, and ensures reliable performance when handling growing volumes of academic and alumni data. This design choice aligns with best practices in enterprise software development and supports the long-term adaptability of the proposed system.
 
 \section{SOFTWARE REQUIREMENTS SPECIFICATION (SRS)}
 
@@ -21,7 +21,7 @@ Overall, the layered client–server architecture enables EduFeedback AI to achi
 EduFeedback AI is an AI-driven academic analytics system designed to assess curriculum relevance by integrating alumni career outcomes, faculty feedback, and curriculum content. The system aims to support Outcome-Based Education (OBE) by providing quantitative and qualitative insights that assist academic administrators in curriculum evaluation and continuous improvement. This SRS document outlines the functional and non-functional requirements, system constraints, and expected performance characteristics of the proposed system.
 
 \subsection{GENERAL DESCRIPTION}
-EduFeedback AI is a web-based, client–server application developed using a layered architecture. The system supports multiple user roles, including alumni, faculty members, and administrators. Alumni provide post-graduation career data through structured surveys, faculty submit CO attainment reports, and administrators analyze aggregated insights via dashboards. The system incorporates Natural Language Processing and machine learning techniques to extract skills from unstructured text, compare them with curriculum topics, and generate curriculum refinement recommendations. The software is designed to be modular, scalable, and extensible.
+EduFeedback AI is a web-based, client-server application developed using a layered architecture. The system supports multiple user roles, including alumni, faculty members, and administrators. Alumni provide post-graduation career data through structured surveys, faculty submit CO attainment reports, and administrators analyze aggregated insights via dashboards. The system incorporates Natural Language Processing and machine learning techniques to extract skills from unstructured text, compare them with curriculum topics, and generate curriculum refinement recommendations. The software is designed to be modular, scalable, and extensible.
 
 \subsection{FUNCTIONAL REQUIREMENTS}
 The system shall provide the following functionalities:
@@ -200,49 +200,52 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
 
 \subsection{USE-CASE DIAGRAMS}
 
-\begin{figure}[!h]
+\begin{figure}[!htbp]
     \centering
-    % \includegraphics[width=0.7\linewidth]{figures/uc_admin.png}
+    \includegraphics[width=0.65\linewidth, height=0.75\textheight, keepaspectratio]{figures/Chapter_4_Fig/uc_admin.png}
     \caption{Use-case diagram for Admin}
     \label{fig:uc_admin}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!htbp]
     \centering
-    % \includegraphics[width=0.7\linewidth]{figures/uc_faculty.png}
+    \includegraphics[width=0.65\linewidth, height=0.75\textheight, keepaspectratio]{figures/Chapter_4_Fig/uc_faculty.png}
     \caption{Use-case diagram for Faculty}
     \label{fig:uc_faculty}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!htbp]
     \centering
-    % \includegraphics[width=0.7\linewidth]{figures/uc_alumni.png}
+    \includegraphics[width=0.65\linewidth, height=0.75\textheight, keepaspectratio]{figures/Chapter_4_Fig/uc_alumni.png}
     \caption{Use-case diagram for Alumni}
     \label{fig:uc_alumni}
 \end{figure}
 
+\clearpage
 \subsection{DATA FLOW DIAGRAMS (DFD)}
 
-\begin{figure}[!h]
+\begin{figure}[!htbp]
     \centering
-    % \includegraphics[width=0.7\linewidth]{figures/dfd_alumni.png}
+    \includegraphics[width=0.75\linewidth, height=0.75\textheight, keepaspectratio]{figures/Chapter_4_Fig/dfd_alumni.png}
     \caption{Alumni Submission Flow}
     \label{fig:dfd_alumni}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!htbp]
     \centering
-    % \includegraphics[width=0.7\linewidth]{figures/dfd_nlp.png}
+    \includegraphics[width=0.75\linewidth, height=0.75\textheight, keepaspectratio]{figures/Chapter_4_Fig/dfd_nlp.png}
     \caption{NLP Analysis Flow}
     \label{fig:dfd_nlp}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!htbp]
     \centering
-    % \includegraphics[width=0.7\linewidth]{figures/dfd_recommendation.png}
+    \includegraphics[width=0.75\linewidth, height=0.75\textheight, keepaspectratio]{figures/Chapter_4_Fig/dfd_recommendation.png}
     \caption{Recommendation Generation Flow}
     \label{fig:dfd_recommendation}
 \end{figure}
+
+\clearpage
 
 \subsection{DATA DICTIONARY}
 
@@ -295,7 +298,7 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
         job\_responsibilities & TEXT & NLP source; Nullable \\ \hline
         tools\_software & TEXT & NLP source; Nullable \\ \hline
         skills\_helped\_land\_job & TEXT & NLP source; Nullable \\ \hline
-        course\_relevance\_rating & INTEGER & 1–5 \\ \hline
+        course\_relevance\_rating & INTEGER & 1-5 \\ \hline
         unused\_subjects & TEXT & NLP source; Nullable \\ \hline
         skills\_missing\_from\_curriculum & TEXT & NLP source; Nullable \\ \hline
     \end{tabular}
@@ -446,7 +449,7 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
         \textbf{Column} & \textbf{Type} & \textbf{Notes} \\ \hline
         id & UUID PK & \\ \hline
         course\_id & FK $\rightarrow$ courses & \\ \hline
-        relevance\_score & FLOAT & Final weighted composite (0–1) \\ \hline
+        relevance\_score & FLOAT & Final weighted composite (0-1) \\ \hline
         alumni\_relevance\_avg & FLOAT & From course\_relevance\_rating \\ \hline
         skill\_match\_score & FLOAT & From cosine similarity avg \\ \hline
         co\_attainment\_avg & FLOAT & NULL if faculty module disabled \\ \hline
