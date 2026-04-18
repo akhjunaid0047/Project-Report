@@ -5,71 +5,87 @@
 \label{Chapter:Planning}
 
 \section{Overview}
-Project planning defines the structured roadmap for the development and completion of EduFeedback AI. The planning process focuses on dividing the project into well-defined phases to ensure systematic progress, effective time management, and clear deliverables at each stage. The project is planned across multiple academic semesters, allowing gradual development, validation, and refinement of system components.
+Project planning defines the structured roadmap for the development and
+completion of EduFeedback AI. The planning process focuses on dividing the
+project into well-defined phases to ensure systematic progress, effective time
+management, and clear deliverables at each stage. The project is planned across
+multiple academic semesters, allowing gradual development, validation, and
+refinement of system components.
 
-\begin{table}[h]
-    \centering
+\begin{longtable}{|l|p{4cm}|p{8cm}|}
     \caption{Phases of the entire project work}
-    \label{tab:project_phases}
-    \scalebox{0.9}{
-    \begin{tabular}{|l|p{4cm}|p{8cm}|}
-        \hline
-        \textbf{Phase} & \textbf{Module Name} & \textbf{Tasks / Implementation Steps} \\
-        \hline
-        Phase 1 & Alumni Career Outcome Collection System & 
-        \begin{itemize}
-            \item Design alumni registration/login portal
-            \item Create structured online survey (job role, skills used, relevance rating, satisfaction)
-            \item Enable option to update career progress (job change / skill growth)
-        \end{itemize} \\ \hline
-        Phase 2 & Teacher Feedback System \& CO Attainment Analyzer & 
-        \begin{itemize}
-            \item Develop teacher login panel
-            \item Create digital feedback form mapped to course outcomes (COs)
-            \item Allow uploading CO attainment reports
-            \item Convert teacher feedback into structured database format
-        \end{itemize} \\ \hline
-        Phase 3 & Job–Curriculum Mapping \& Gap Analysis (AI/NLP Engine) & 
-        \begin{itemize}
-            \item Collect syllabus/course content (text format)
-            \item Use NLP (TF-IDF / BERT embeddings) to extract key topics
-            \item Extract job skill keywords from alumni responses
-            \item Compare syllabus topics vs job-required skills
-            \item Generate “Skill Gap Index” and matching percentage
-        \end{itemize} \\ \hline
-        Phase 4 & AI-Based Recommendation Engine for Curriculum Improvement & 
-        \begin{itemize}
-            \item Create scoring model to rate relevance of each course
-            \item Suggest new modules/topics based on missing skills
-            \item Identify low-ROI topics (taught but not used in job)
-            \item Generate structured recommendations for syllabus revision
-        \end{itemize} \\ \hline
-        Phase 5 & Visualization \& Decision Support Dashboard & 
-        \begin{itemize}
-            \item Build interactive dashboard (Streamlit / React + API)
-            \item Display analytics (graphs, heatmaps, skill gaps)
-            \item Provide admin panel for HoD/IQAC/NAAC reviewers
-            \item Enable export to PDF/Excel reports
-        \end{itemize} \\ \hline
-        Phase 6 & Testing \& Validation & 
-        \begin{itemize}
-            \item Test data consistency across teacher + alumni sheets
-            \item Validate skill mapping via sample career Datasets
-            \item Pilot use with small group of students/alumni
-            \item Perform usability testing and feedback review
-        \end{itemize} \\ \hline
-        Phase 7 & Documentation \& Report Preparation & 
-        \begin{itemize}
-            \item Create project documentation (SRS, DFD, UML)
-            \item Prepare final presentation PPT + demo video
-            \item Draft research methodology section
-        \end{itemize} \\
-        \hline
-    \end{tabular}
-    }
-\end{table}
+    \label{tab:project_phases} \\
+    \hline
+    \textbf{Phase} & \textbf{Module Name} & \textbf{Tasks / Implementation Steps} \\
+    \hline
+    \endfirsthead
 
-The planning approach emphasizes requirement clarity, modular development, and incremental implementation, ensuring that the system remains adaptable to future enhancements and institutional requirements.
+    \multicolumn{3}{c}{\small\itshape (Table \ref{tab:project_phases} continued from previous page)} \\
+    \hline
+    \textbf{Phase} & \textbf{Module Name} & \textbf{Tasks / Implementation Steps} \\
+    \hline
+    \endhead
+
+    \hline
+    \multicolumn{3}{r}{\small\itshape Continued on next page\ldots} \\
+    \endfoot
+
+    \hline
+    \endlastfoot
+
+    Phase 1 & Alumni Career Outcome Collection System &
+    \textbullet\ Design alumni registration/login portal \newline
+    \textbullet\ Create structured online survey (job role, skills used, relevance rating, satisfaction) \newline
+    \textbullet\ Enable option to update career progress (job change / skill growth)
+    \\ \hline
+
+    Phase 2 & Teacher Feedback System \& CO Attainment Analyzer &
+    \textbullet\ Develop teacher login panel \newline
+    \textbullet\ Create digital feedback form mapped to course outcomes (COs) \newline
+    \textbullet\ Allow uploading CO attainment reports \newline
+    \textbullet\ Convert teacher feedback into structured database format
+    \\ \hline
+
+    Phase 3 & Job--Curriculum Mapping \& Gap Analysis (AI/NLP Engine) &
+    \textbullet\ Collect syllabus/course content (text format) \newline
+    \textbullet\ Use NLP (TF-IDF / BERT embeddings) to extract key topics \newline
+    \textbullet\ Extract job skill keywords from alumni responses \newline
+    \textbullet\ Compare syllabus topics vs job-required skills \newline
+    \textbullet\ Generate ``Skill Gap Index'' and matching percentage
+    \\ \hline
+
+    Phase 4 & AI-Based Recommendation Engine for Curriculum Improvement &
+    \textbullet\ Create scoring model to rate relevance of each course \newline
+    \textbullet\ Suggest new modules/topics based on missing skills \newline
+    \textbullet\ Identify low-ROI topics (taught but not used in job) \newline
+    \textbullet\ Generate structured recommendations for syllabus revision
+    \\ \hline
+
+    Phase 5 & Visualization \& Decision Support Dashboard &
+    \textbullet\ Build interactive dashboard (Streamlit / React + API) \newline
+    \textbullet\ Display analytics (graphs, heatmaps, skill gaps) \newline
+    \textbullet\ Provide admin panel for HoD/IQAC/NAAC reviewers \newline
+    \textbullet\ Enable export to PDF/Excel reports
+    \\ \hline
+
+    Phase 6 & Testing \& Validation &
+    \textbullet\ Test data consistency across teacher + alumni sheets \newline
+    \textbullet\ Validate skill mapping via sample career datasets \newline
+    \textbullet\ Pilot use with small group of students/alumni \newline
+    \textbullet\ Perform usability testing and feedback review
+    \\ \hline
+
+    Phase 7 & Documentation \& Report Preparation &
+    \textbullet\ Create project documentation (SRS, DFD, UML) \newline
+    \textbullet\ Prepare final presentation PPT + demo video \newline
+    \textbullet\ Draft research methodology section
+    \\
+
+\end{longtable}
+
+The planning approach emphasizes requirement clarity, modular development,
+and incremental implementation, ensuring that the system remains adaptable to
+future enhancements and institutional requirements.
 
 \section{Current Status of the Project}
 At the present stage, the foundational components of the project have been completed. The following activities have been successfully carried out:
@@ -110,7 +126,7 @@ The presentation layer provides role-based access through three interfaces: Alum
 
 The application layer acts as the core processing unit of the system. It handles role-based logins, authentication and authorization, and exposes RESTful APIs for communication between the presentation layer and backend services.
 
-The data analytics layer is responsible for intelligence-driven processing. It performs natural language processing using techniques such as TF-IDF and BERT, supports skill–curriculum mapping, calculates skill gap indices, and generates recommendations for curriculum improvement.
+The data analytics layer is responsible for intelligence-driven processing. It performs natural language processing using techniques such as TF-IDF and BERT, supports skill-to-curriculum mapping, calculates skill gap indices, and generates recommendations for curriculum improvement.
 
 The data layer consists of a relational SQL database that stores alumni records, feedback data, user credentials, and analysis results. This layer ensures secure and persistent storage of all system data.
 
