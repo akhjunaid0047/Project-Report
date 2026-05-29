@@ -4,7 +4,7 @@
 \chapter{Project Description}
 \label{Chapter:Description}
 
-\section{SOFTWARE MODEL}
+\section{Software Model}
 EduFeedback AI follows a layered client-server architecture to make the system easier to manage, scale, and improve over time. The overall design is divided into four logical layers, with each layer handling a specific role in the system. This clear separation of responsibilities helps keep the system well-organized and reduces dependency between components. As a result, updates or improvements can be made to one part of the system without disrupting others, which supports long-term maintenance and future expansion.
 
 The application layer is the part of the system that handles most of the working logic. It connects what the user does on the website with what happens in the backend. This layer checks who the user is, what role they have, and whether they are allowed to access a particular feature. It also makes sure that the data sent by users is valid before moving it further. When alumni submit surveys or faculty members provide course-related feedback, this layer manages how the information flows through the system. Keeping these rules in one place helps in making small changes later without affecting the full system. The data analytics layer is mainly responsible for understanding the information collected from users. Most of the feedback received is in text form and cannot be directly used for analysis. This layer processes such data and looks for useful patterns and meanings in it. It compares alumni feedback, job-related information, and course details to find how well the curriculum matches industry needs. Based on this comparison, the system highlights areas where skills are lacking and subjects that need improvement. This layer is kept flexible so that better analysis methods or new data sources can be added in the future if required.
@@ -15,15 +15,15 @@ The data layer functions as the persistent storage foundation of the system. A r
 
 Overall, the layered client-server architecture enables EduFeedback AI to achieve high cohesion within modules and low coupling across layers. Such an architectural design enhances system scalability, facilitates maintenance and future upgrades, and ensures reliable performance when handling growing volumes of academic and alumni data. This design choice aligns with best practices in enterprise software development and supports the long-term adaptability of the proposed system.
 
-\section{SOFTWARE REQUIREMENTS SPECIFICATION (SRS)}
+\section{Software Requirements Specification (SRS)}
 
-\subsection{INTRODUCTION}
+\subsection{Introduction}
 EduFeedback AI is an AI-driven academic analytics system designed to assess curriculum relevance by integrating alumni career outcomes, faculty feedback, and curriculum content. The system aims to support Outcome-Based Education (OBE) by providing quantitative and qualitative insights that assist academic administrators in curriculum evaluation and continuous improvement. This SRS document outlines the functional and non-functional requirements, system constraints, and expected performance characteristics of the proposed system.
 
-\subsection{GENERAL DESCRIPTION}
+\subsection{General Description}
 EduFeedback AI is a web-based, client-server application developed using a layered architecture. The system supports multiple user roles, including alumni, faculty members, and administrators. Alumni provide post-graduation career data through structured surveys, faculty submit CO attainment reports, and administrators analyze aggregated insights via dashboards. The system incorporates Natural Language Processing and machine learning techniques to extract skills from unstructured text, compare them with curriculum topics, and generate curriculum refinement recommendations. The software is designed to be modular, scalable, and extensible.
 
-\subsection{FUNCTIONAL REQUIREMENTS}
+\subsection{Functional Requirements}
 The system shall provide the following functionalities:
 \begin{itemize}
     \item The system shall allow alumni to register, authenticate, and submit career outcome surveys.
@@ -38,7 +38,7 @@ The system shall provide the following functionalities:
     \item The system shall support export of analytical reports in PDF and spreadsheet formats.
 \end{itemize}
 
-\subsection{INTERFACE REQUIREMENTS}
+\subsection{Interface Requirements}
 \textbf{User Interface}
 \begin{itemize}
     \item Web-based interfaces accessible via standard browsers.
@@ -58,7 +58,7 @@ The system shall provide the following functionalities:
     \item RESTful APIs for communication between frontend and backend modules.
 \end{itemize}
 
-\subsection{PERFORMANCE REQUIREMENTS}
+\subsection{Performance Requirements}
 \begin{itemize}
     \item The system shall handle concurrent access from multiple users without degradation in performance.
     \item Response time for survey submission and dashboard queries shall not exceed acceptable web application limits.
@@ -66,7 +66,7 @@ The system shall provide the following functionalities:
     \item System uptime shall be maintained at a high level during academic sessions.
 \end{itemize}
 
-\subsection{DESIGN CONSTRAINTS}
+\subsection{Design Constraints}
 \begin{itemize}
     \item The system shall be developed using open-source frameworks and tools.
     \item Data privacy and access control constraints shall be enforced.
@@ -74,7 +74,7 @@ The system shall provide the following functionalities:
     \item The system must be deployable on standard institutional infrastructure.
 \end{itemize}
 
-\subsection{NON-FUNCTIONAL ATTRIBUTES}
+\subsection{Non-Functional Attributes}
 \begin{itemize}
     \item \textbf{Reliability}
     \begin{itemize}
@@ -102,9 +102,9 @@ The system shall provide the following functionalities:
     \end{itemize}
 \end{itemize}
 
-\section{FUNCTIONAL SPECIFICATION}
+\section{Functional Specification}
 
-\subsection{TEXT PREPROCESSING PIPELINE}
+\subsection{Text Preprocessing Pipeline}
 Before features are extracted and embedded, raw textual data from alumni surveys and syllabus PDFs must be uniformly processed.
 
 \textbf{Input Corpora}
@@ -163,7 +163,7 @@ Provides deep contextual reasoning. It ensures that synonyms or distinct phrases
     \item \textbf{Rationale for change from \texttt{all-mpnet-base-v2}}: the smaller MiniLM model runs comfortably on CPU-only Fargate tasks (no GPU required), keeps cold-start latency manageable, and is sufficient for the cosine-similarity matching workload at this corpus scale. The accuracy delta on short skill/topic phrases is small.
 \end{itemize}
 
-\subsection{MATHEMATICAL MODEL \& SCORING FORMULA’S}
+\subsection{Mathematical Model \& Scoring Formula's}
 \textbf{COSINE SIMILARITY MATCHING}
 The foundational operation to compare an Alumni Skill ($S$) against a Syllabus Topic ($T$) within a Course ($C$).
 
@@ -216,7 +216,7 @@ CRS = (w'_1 \times R_{\text{alumni}}) + (w'_2 \times M_{\text{skill}})
 \]
 Weights are renormalized so that $w'_1 + w'_2 = 1.0$. The single-row \texttt{institution\_settings} table holds all weights.
 
-\subsection{RECOMMENDATION ENGINE LOGIC}
+\subsection{Recommendation Engine Logic}
 The recommendation engine emits four recommendation types: \textbf{ADD}, \textbf{REDUCE}, \textbf{EMERGING} (tagged-ADD), and \textbf{OVERHAUL}.
 
 \textbf{Recommendation Priority Score}
@@ -257,7 +257,7 @@ The AI flags syllabus topics applying the following deterministic thresholds:
     \item The constant \texttt{OVERHAUL\_THRESHOLD\_FLOOR} = 0.50 remains in \texttt{recommendation\_engine.py} as documentation only.
 \end{itemize}
 
-\subsection{LLM DOMAIN FILTER}
+\subsection{LLM Domain Filter}
 \textbf{Problem Addressed:} BERT-based low-similarity gap detection can incorrectly classify off-domain skills as missing. For example, an Operating Systems syllabus may not explicitly mention ``git'', even though many alumni do. As a result, the BERT engine may incorrectly flag git as an ADD candidate despite it not belonging to the academic scope of the OS course.
 
 \textbf{Approach:} An LLM-based post-filter is applied to the ADD recommendation list. For each (course, candidate-skill) pair, the model determines whether the skill genuinely belongs to the academic domain of the course.
@@ -281,7 +281,7 @@ The AI flags syllabus topics applying the following deterministic thresholds:
     \item Effect: Prevents repeated LLM inference costs across re-runs when the same (course, candidate-list) combination appears again.
 \end{itemize}
 
-\subsection{SYLLABUS DIFF GENERATION}
+\subsection{Syllabus Diff Generation}
 During the AI revision process, recommendations (Type ADD/REDUCE/MODIFY) need to be inserted correctly back into the syllabus structure.
 
 \textbf{Topic Insertion Algorithm (For ADDs):} Let $R_{\text{topic}}$ be the recommended industry skill. To determine which Unit it belongs to:
@@ -298,7 +298,7 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
 
 \section{Design Specification}
 
-\subsection{USER INTERFACE DESIGN}
+\subsection{User Interface Design}
 The user interface of EduFeedback AI is designed to provide a simple, responsive, and role-based interaction experience for different categories of users. The system interface is developed using Next.js and follows a modular design approach to ensure usability, accessibility, and smooth navigation across different system functionalities.
 
 The interface is divided into separate portals for Alumni, Faculty, and Administrators. Each user role is provided with specific functionalities based on system access permissions.
@@ -356,7 +356,7 @@ The \textbf{Alumni Portal} allows users to register, update profiles, and submit
 
 \clearpage
 
-\subsection{USE-CASE DIAGRAMS}
+\subsection{Use-Case Diagrams}
 
 \begin{figure}[!htbp]
     \centering
@@ -380,7 +380,7 @@ The \textbf{Alumni Portal} allows users to register, update profiles, and submit
 \end{figure}
 
 \clearpage
-\subsection{DATA FLOW DIAGRAMS (DFD)}
+\subsection{Data Flow Diagrams (DFD)}
 
 \begin{figure}[!htbp]
     \centering
@@ -405,7 +405,7 @@ The \textbf{Alumni Portal} allows users to register, update profiles, and submit
 
 \clearpage
 
-\subsection{DATA DICTIONARY}
+\subsection{Data Dictionary}
 
 % Uniform cell padding for all Data Dictionary tables
 {\renewcommand{\arraystretch}{1.5}%
@@ -695,7 +695,7 @@ The \textbf{Alumni Portal} allows users to register, update profiles, and submit
 } % end arraystretch / tabcolsep group
 
 \clearpage
-\subsection{E-R DIAGRAMS}
+\subsection{E-R Diagrams}
 
 \begin{figure}[!htbp]
     \centering
