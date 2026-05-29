@@ -75,11 +75,32 @@ The system shall provide the following functionalities:
 \end{itemize}
 
 \subsection{NON-FUNCTIONAL ATTRIBUTES}
-\textbf{Reliability}: The system shall ensure reliable data storage and retrieval, with safeguards against data loss.
-\textbf{Security}: Role-based authentication and authorization. Secure handling of user credentials. Restricted access to sensitive academic and alumni data.
-\textbf{Usability}: Simple and intuitive user interfaces. Minimal training required for users.
-\textbf{Maintainability}: Modular design enables easy updates and enhancements. Clear separation between data, logic, and presentation layers.
-\textbf{Scalability}: Ability to accommodate increasing numbers of users and data volume.
+\begin{itemize}
+    \item \textbf{Reliability}
+    \begin{itemize}
+        \item The system shall ensure reliable data storage and retrieval, with safeguards against data loss.
+    \end{itemize}
+    \item \textbf{Security}
+    \begin{itemize}
+        \item Role-based authentication and authorization.
+        \item Secure handling of user credentials.
+        \item Restricted access to sensitive academic and alumni data.
+    \end{itemize}
+    \item \textbf{Usability}
+    \begin{itemize}
+        \item Simple and intuitive user interfaces.
+        \item Minimal training required for users.
+    \end{itemize}
+    \item \textbf{Maintainability}
+    \begin{itemize}
+        \item Modular design enables easy updates and enhancements.
+        \item Clear separation between data, logic, and presentation layers.
+    \end{itemize}
+    \item \textbf{Scalability}
+    \begin{itemize}
+        \item Ability to accommodate increasing numbers of users and data volume.
+    \end{itemize}
+\end{itemize}
 
 \section{FUNCTIONAL SPECIFICATION}
 
@@ -88,46 +109,58 @@ Before features are extracted and embedded, raw textual data from alumni surveys
 
 \textbf{Input Corpora}
 \begin{enumerate}
-    \item \textbf{Alumni Free-Text}: Extracted from survey fields (e.g., job\_responsibilities, tools\_software, skills\_acquired\_after\_graduation).
-    \item \textbf{Syllabus PDF Text}: Extracted via pdfplumber (Unit headers, Learning Objectives, Topic breakdowns).
+    \item \textbf{Alumni Free-Text}: Extracted from 8 NLP target survey fields (job\_responsibilities, tools\_software, skills\_helped\_land\_job, skills\_missing\_from\_curriculum, skills\_acquired\_after\_graduation, unused\_subjects, certifications\_completed, suggestions\_for\_improvement).
+    \item \textbf{Syllabus PDF Text}: Extracted via pdfplumber and structured by \texttt{nlp\_engine/syllabus\_parser.py} (Unit headers, Learning Objectives, Topic breakdowns).
 \end{enumerate}
 
 \textbf{Processing Steps (spaCy)}
 \begin{enumerate}
     \item \textbf{Lowercasing}: Convert all text to lowercase for uniformity.
     \item \textbf{Tokenization}: Split sentences into individual word tokens.
-    \item \textbf{Stopword Removal}: Remove standard English stopwords and a custom academic lexicon. (e.g. {"unit", "module", "chapter", "semester", "course", "subject", "study", "learn", "understand", "basic", "introduction", "advanced"})
-    \item \textbf{Lemmatization}: Reduce words to their dictionary root (e.g., "modules" $\rightarrow$ "module", "implementing" $\rightarrow$ "implement").
-    \item \textbf{Entities \& N-grams}: Extract unigrams and bigrams via sliding window arrays to preserve context (e.g., "machine learning", "data structures").
+    \item \textbf{Stopword Removal}: Remove standard English stopwords and a custom academic lexicon (e.g., \{``unit'', ``module'', ``chapter'', ``semester'', ``course'', ``subject'', ``study'', ``learn'', ``understand'', ``basic'', ``introduction'', ``advanced''\}).
+    \item \textbf{Lemmatization}: Reduce words to their dictionary root (e.g., ``modules'' $\rightarrow$ ``module'', ``implementing'' $\rightarrow$ ``implement'').
+    \item \textbf{Entities \& N-grams}: Extract unigrams and bigrams via sliding window arrays to preserve context (e.g., ``machine learning'', ``data structures'').
 \end{enumerate}
 
+\textbf{Syllabus PDF Parser (\texttt{syllabus\_parser.py})}
+A purpose-built parser that goes beyond raw pdfplumber extraction to handle real-world institutional PDFs:
+\begin{itemize}
+    \item \textbf{Multi-course bundles} --- a single PDF containing several Subject Code: sections is sliced at code boundaries; only the section matching the caller-provided course code is kept.
+    \item \textbf{Placeholder detection} --- PDFs containing ``detailed syllabus was not found'' (or equivalent) are flagged with \texttt{parse\_status='placeholder'} so downstream analytics skip them rather than feeding noise into BERT.
+    \item \textbf{Flexible section vocabulary} --- recognizes UNIT / MODULE / CHAPTER / SECTION / PART / LESSON / WEEK / TOPIC, both arabic and roman numerals, with multiple separators (\texttt{-}, \texttt{--}, \texttt{:}, \texttt{.}).
+    \item \textbf{Line-wrap joining} --- body lines under each module are joined and re-split at sentence boundaries instead of being treated as separate topics.
+    \item \textbf{Course Outcomes} --- CO-1..CO-N embedded mid-paragraph with optional K1..K6 Bloom-level annotations are extracted as objectives.
+\end{itemize}
+
 \subsection{Feature Extraction \& Embedding Models (Hybrid Ensemble)}
-The system employs a Hybrid/Ensemble Feature Representation strategy for text vectorization. Rather than relying on a single traditional Machine Learning algorithm, the pipeline ensembles Statistical Keyword Scoring (TF-IDF) with Deep Contextual Embeddings (BERT). This hybrid approach ensures both rare, highly-specific technical keywords (captured by TF-IDF) and broad, conceptually similar phrases (captured by BERT) are mathematically captured.
+The system employs a \textbf{Hybrid/Ensemble Feature Representation strategy}: Statistical Keyword Scoring (TF-IDF) \textbf{plus} Deep Contextual Embeddings (BERT) \textbf{plus} an LLM post-filter for domain-fit. Rare technical keywords are captured by TF-IDF, conceptually similar phrases by BERT, and false-positive cross-domain matches are filtered out by the LLM.
 
 The following Python modules and libraries strictly manage this ensemble pipeline:
 \begin{itemize}
-    \item \textbf{spaCy (en\_core\_web\_sm model)}: Handles linguistic rules, tokenization, and Named Entity Recognition (NER).
+    \item \textbf{spaCy (\texttt{en\_core\_web\_sm})}: Handles linguistic rules, tokenization, and Named Entity Recognition (NER).
     \item \textbf{scikit-learn}: Powers the TF-IDF vectorization and cosine similarity matrix computations.
     \item \textbf{sentence-transformers}: Interfaces with PyTorch to provide the BERT neural network embeddings.
     \item \textbf{pdfplumber}: Handles the robust structural extraction of text and tables from legacy syllabus PDFs.
     \item \textbf{ReportLab}: Generates the finalized visually robust revised syllabus PDFs.
     \item \textbf{Celery and Redis}: Provide an asynchronous task queue to orchestrate the computationally expensive embedding processes without blocking API requests.
+    \item \textbf{OpenAI / Anthropic SDKs}: Backing the LLM domain filter.
 \end{itemize}
 
 \textbf{TF-IDF (TERM FREQUENCY-INVERSE DOCUMENT FREQUENCY)}
 Used primarily to determine the statistical importance of words across the entire institution's corpus.
 \begin{itemize}
-    \item Vocabulary/Max Features: 5000 (tunable).
-    \item N-gram range: (1,2)
+    \item Max Features: 5000 (tunable).
+    \item N-gram range: (1,2).
     \item Sublinear TF Scaling: Enabled to compress term frequency impact.
 \end{itemize}
 
 \textbf{BERT SEMANTIC EMBEDDINGS}
-Provides deep contextual reasoning. It ensures that synonyms or distinct phrases with similar meanings map to the same vector space.
+Provides deep contextual reasoning. It ensures that synonyms or distinct phrases with similar meanings (e.g., ``Deep Learning'' vs. ``Neural Networks'') map to the same vector space.
 \begin{itemize}
-    \item Model Selected: \texttt{sentence-transformers/all-mpnet-base-v2}
-    \item Dimensionality: 768-dimensional vectors.
-    \item Hardware Match: Optimized for Apple M3 Max / 36GB memory constraints without requiring heavy quantization.
+    \item Model Selected: \texttt{sentence-transformers/all-MiniLM-L6-v2}
+    \item Dimensionality: 384-dimensional vectors.
+    \item Size: $\sim$80 MB.
+    \item \textbf{Rationale for change from \texttt{all-mpnet-base-v2}}: the smaller MiniLM model runs comfortably on CPU-only Fargate tasks (no GPU required), keeps cold-start latency manageable, and is sufficient for the cosine-similarity matching workload at this corpus scale. The accuracy delta on short skill/topic phrases is small.
 \end{itemize}
 
 \subsection{MATHEMATICAL MODEL \& SCORING FORMULA’S}
@@ -150,36 +183,103 @@ Then, the Skill Gap Index is computed as:
 \[
 SGI(S, C) = 1.0 - \text{Best Match}(S, C)
 \]
-Note: A higher SGI indicates a wider gap.
+A higher SGI means a wider gap. A skill is flagged as an actionable gap only if:
+\begin{itemize}
+    \item $SGI(S, C) > \texttt{gap\_threshold}$ (default \textbf{0.40}, configurable in \texttt{institution\_settings})
+    \item AND $P_{\text{mention}}(S) \geq \texttt{min\_alumni\_mention\_pct}$ (default \textbf{0.10})
+\end{itemize}
+
+\textbf{ALUMNI MENTION PERCENTAGE --- Denominator Clarification}
+\[
+P_{\text{mention}}(S) = \frac{\text{distinct alumni mentioning } S}{\texttt{responsive\_alumni}}
+\]
+\texttt{responsive\_alumni} = \texttt{COUNT(DISTINCT alumni\_id) FROM alumni\_skills} --- alumni who have \textbf{at least one extracted skill in any field}. This is not the same as \texttt{total\_alumni}: respondents who left every NLP-target field blank (career-break / exam-prep) are excluded from the denominator so their absence does not dilute genuine demand signals. The raw \texttt{total\_alumni} count is still captured in \texttt{analytics\_runs.alumni\_count} as the dataset-size snapshot.
 
 \textbf{COURSE RELEVANCE SCORE (CRS)}
 An aggregate score from 0.0 to 1.0 defining how relevant a specific course is to industry demands.
-Case A: Faculty Module Enabled (CO Data Available): 
+
+\textit{Case A: Faculty Module Enabled (CO Data Available):}
 \[
 CRS = (w_1 \times R_{\text{alumni}}) + (w_2 \times M_{\text{skill}}) + (w_3 \times A_{\text{CO}})
 \]
 Where:
 \begin{itemize}
     \item $w_1, w_2, w_3$ = Institution-configured weights where $w_1 + w_2 + w_3 = 1.0$
-    \item $R_{\text{alumni}}$ = Average alumni rating normalized to [0,1]
-    \item $M_{\text{skill}}$ = Average cosine similarity across targeted skills mapped to the course.
+    \item $R_{\text{alumni}}$ = Average alumni rating normalized to [0,1] (originally 1--5).
+    \item $M_{\text{skill}}$ = Average cosine similarity across all targeted skills mapped to the course.
     \item $A_{\text{CO}}$ = Average internal course outcome attainment percentage.
 \end{itemize}
 
+\textit{Case B: Faculty Module Disabled (Graceful Degradation):}
+\[
+CRS = (w'_1 \times R_{\text{alumni}}) + (w'_2 \times M_{\text{skill}})
+\]
+Weights are renormalized so that $w'_1 + w'_2 = 1.0$. The single-row \texttt{institution\_settings} table holds all weights.
+
 \subsection{RECOMMENDATION ENGINE LOGIC}
-When a skill gap is identified, the system evaluates the importance and urgency of addressing that gap using a priority score.
+The recommendation engine emits four recommendation types: \textbf{ADD}, \textbf{REDUCE}, \textbf{EMERGING} (tagged-ADD), and \textbf{OVERHAUL}.
+
+\textbf{Recommendation Priority Score}
 \[
 \text{Priority Score} = SGI \times P_{\text{mention}} \times W_{\text{recency}}
 \]
-Where $P_{\text{mention}}$ is Alumni Mention Percentage, and $W_{\text{recency}}$ is Recency Multiplier (1.5 if emerging trend, 1.0 otherwise).
+Where:
+\begin{itemize}
+    \item $SGI$ = Skill Gap Index.
+    \item $P_{\text{mention}}$ = Alumni Mention Percentage (e.g., 0.38 if 38\% of alumni mentioned it).
+    \item $W_{\text{recency}}$ = Recency Multiplier: 1.5 if the skill primarily appears in the last 2 graduation cohorts (Emerging Trend); 1.0 otherwise.
+\end{itemize}
 
-\textbf{CLASSIFICATION RULES}
+\textbf{Classification Rules}
 The AI flags syllabus topics applying the following deterministic thresholds:
-\begin{enumerate}
-    \item \textbf{Type: ADD (High Demand, Low Coverage)}
-    \item \textbf{Type: REDUCE / REVIEW (Low ROI Topics)}
-    \item \textbf{Type: OVERHAUL (Severe Misalignment)}
-\end{enumerate}
+
+\textit{Type: ADD (High Demand, Low Coverage)} --- The engine uses the configurable \texttt{gap\_threshold} from \texttt{institution\_settings} plus a \texttt{HIGH\_DEMAND\_MULTIPLIER} of 1.5.
+\begin{itemize}
+    \item Condition: $SGI(S, C) > \texttt{gap\_threshold}$ (default 0.40, i.e., max similarity $<$ 0.60) AND $P_{\text{mention}}(S) \geq \texttt{gap\_threshold} \times 1.5$ --- so that only genuinely high-demand skills become ADDs, not every skill that merely passes the gap floor.
+    \item Optional LLM post-filter: drops candidates that don't belong to the course's academic domain.
+    \item Action: Triggers a recommendation to inject the skill into the revised syllabus.
+\end{itemize}
+
+\textit{Type: REDUCE --- Topic-Driven, Evidence-Positive} --- The earlier absence-of-evidence approach (reducing topics simply because alumni did not mention them) was removed, as it often produced false positives for foundational subjects. The revised rule follows an evidence-positive approach: a topic is recommended for reduction only when alumni explicitly report that they never used it in practice.
+\begin{itemize}
+    \item There exists an alumni skill $S$ whose best-matching syllabus topic $T$ in course $C$ has $\text{similarity}(S, T) \geq \texttt{TOPIC\_MATCH\_FLOOR}$ (0.45), i.e., the topic clearly maps to that skill.
+    \item AND the unused ratio of $S$ (share of $S$'s alumni mentions that came from the \texttt{unused\_subjects} survey field) is $\geq \texttt{UNUSED\_RATIO\_THRESHOLD}$ (0.50, i.e., $\geq 50\%$).
+    \item AND $S$ has $\geq \texttt{MIN\_UNUSED\_MENTIONS}$ (3) distinct alumni reporting it as unused --- a small-sample noise floor.
+    \item Action: Recommends shortening or abbreviating the specific syllabus topic $T$, rather than modifying the entire course. REDUCE recommendations are generated against syllabus topics, not alumni skills.
+\end{itemize}
+
+\textit{Type: EMERGING --- Recency-Boosted ADD} --- EMERGING is not a separate classification category; it represents an ADD recommendation whose ranking is boosted by a recency weight $W_{\text{recency}} = 1.5$. This boost is applied when the underlying skill was primarily acquired after graduation across the alumni cohort. The recommendation is additionally tagged in the UI so administrators can identify the reason for its elevated ranking.
+
+\textit{Type: OVERHAUL --- Bottom-Percentile Courses} --- OVERHAUL was previously decided per-course inside \texttt{recommendation\_engine.py} from an absolute CRS threshold. It is now decided in \texttt{tasks.py} at the analytics-run level using a relative bottom-percentile cut across all courses in the run. This avoids both false positives in strong departments and false negatives in weak ones.
+\begin{itemize}
+    \item Condition (in \texttt{tasks.py}): course's CRS lies in the bottom percentile across the run.
+    \item Action: Flags the entire course for committee review rather than isolated patch revisions.
+    \item The constant \texttt{OVERHAUL\_THRESHOLD\_FLOOR} = 0.50 remains in \texttt{recommendation\_engine.py} as documentation only.
+\end{itemize}
+
+\subsection{LLM DOMAIN FILTER}
+\textbf{Problem Addressed:} BERT-based low-similarity gap detection can incorrectly classify off-domain skills as missing. For example, an Operating Systems syllabus may not explicitly mention ``git'', even though many alumni do. As a result, the BERT engine may incorrectly flag git as an ADD candidate despite it not belonging to the academic scope of the OS course.
+
+\textbf{Approach:} An LLM-based post-filter is applied to the ADD recommendation list. For each (course, candidate-skill) pair, the model determines whether the skill genuinely belongs to the academic domain of the course.
+
+\textbf{Scope:} The filter applies only to ADD candidates. REDUCE and OVERHAUL recommendations pass through unchanged, as they are not affected by the same domain-confusion issue.
+
+\textbf{Provider Configuration:}
+\begin{itemize}
+    \item \texttt{LLM\_PROVIDER} --- Active default: \texttt{openai}; Fallback: \texttt{anthropic}.
+    \item Model --- \texttt{LLM\_OPENAI\_MODEL} (default: \texttt{gpt-4o-mini}); Fallback: \texttt{LLM\_ANTHROPIC\_MODEL} (default: \texttt{claude-haiku-4-5-20251001}).
+    \item API Key --- \texttt{OPENAI\_API\_KEY} / \texttt{ANTHROPIC\_API\_KEY}.
+\end{itemize}
+
+\textbf{Prompt Size Cap:} \texttt{MAX\_TOPICS\_PER\_UNIT} = 8. A maximum of 8 topics per unit are included in the prompt to keep prompts compact, predictable, and cost-efficient.
+
+\textbf{Redis Caching:}
+\begin{itemize}
+    \item Key: \texttt{domain\_filter:<CACHE\_VERSION>:<sha256(course\_code + sorted\_outline + sorted\_candidates)>}.
+    \item TTL: \texttt{CACHE\_TTL\_SECONDS} = 7 $\times$ 24 $\times$ 3600 (7 days).
+    \item Invalidation: increment \texttt{CACHE\_VERSION} (currently ``v1'') whenever changes to the system prompt or model semantics could invalidate previous cache entries.
+    \item Effect: Prevents repeated LLM inference costs across re-runs when the same (course, candidate-list) combination appears again.
+\end{itemize}
 
 \subsection{SYLLABUS DIFF GENERATION}
 During the AI revision process, recommendations (Type ADD/REDUCE/MODIFY) need to be inserted correctly back into the syllabus structure.
@@ -197,6 +297,64 @@ During the AI revision process, recommendations (Type ADD/REDUCE/MODIFY) need to
 The Diff Generator then builds a JSON object marking original strings in red (REDUCE/DELETE) and proposed new strings in green (ADD), paired directly with evidence metrics ($P_{\text{mention}}$ and $W_{\text{recency}}$) to present the Diff view to the administrator.
 
 \section{Design Specification}
+
+\subsection{USER INTERFACE DESIGN}
+The user interface of EduFeedback AI is designed to provide a simple, responsive, and role-based interaction experience for different categories of users. The system interface is developed using Next.js and follows a modular design approach to ensure usability, accessibility, and smooth navigation across different system functionalities.
+
+The interface is divided into separate portals for Alumni, Faculty, and Administrators. Each user role is provided with specific functionalities based on system access permissions.
+
+The \textbf{Alumni Portal} allows users to register, update profiles, and submit career-related feedback through structured survey forms. The \textbf{Faculty Portal} supports the submission of Course Outcome (CO) attainment data and academic feedback. The \textbf{Admin Dashboard} provides analytical visualizations, curriculum relevance reports, skill gap analysis, and recommendation outputs generated by the AI engine.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\linewidth, height=0.75\textheight, keepaspectratio]{figures/Chapter_4_Fig/1.overview.png}
+    \caption{EduFeedback AI -- Overview}
+    \label{fig:ui_overview}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\linewidth, height=0.75\textheight, keepaspectratio]{figures/Chapter_4_Fig/2.skillgap.png}
+    \caption{Skill Gap}
+    \label{fig:ui_skillgap}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\linewidth, height=0.75\textheight, keepaspectratio]{figures/Chapter_4_Fig/3.recommendations.png}
+    \caption{Recommendations}
+    \label{fig:ui_recommendations}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\linewidth, height=0.75\textheight, keepaspectratio]{figures/Chapter_4_Fig/4.syllabirevision.png}
+    \caption{Syllabi Data}
+    \label{fig:ui_syllabi}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\linewidth, height=0.75\textheight, keepaspectratio]{figures/Chapter_4_Fig/5.systemsettings.png}
+    \caption{Setting -- How the system thinks}
+    \label{fig:ui_settings}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\linewidth, height=0.75\textheight, keepaspectratio]{figures/Chapter_4_Fig/7.careersurvey.png}
+    \caption{Alumni -- Career survey}
+    \label{fig:ui_careersurvey}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\linewidth, height=0.75\textheight, keepaspectratio]{figures/Chapter_4_Fig/6.AlumniDashboard.png}
+    \caption{Profile -- Alumni Dashboard}
+    \label{fig:ui_alumni_dashboard}
+\end{figure}
+
+\clearpage
 
 \subsection{USE-CASE DIAGRAMS}
 
@@ -535,5 +693,29 @@ The Diff Generator then builds a JSON object marking original strings in red (RE
 \end{table}
 
 } % end arraystretch / tabcolsep group
+
+\clearpage
+\subsection{E-R DIAGRAMS}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.95\linewidth, height=0.75\textheight, keepaspectratio]{figures/Chapter_4_Fig/ER1.jpeg}
+    \caption{Core Identity and User Table}
+    \label{fig:er_core_identity}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.95\linewidth, height=0.75\textheight, keepaspectratio]{figures/Chapter_4_Fig/ER2.jpeg}
+    \caption{Courses, Syllabus and Faculty Table}
+    \label{fig:er_courses_syllabus_faculty}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.95\linewidth, height=0.75\textheight, keepaspectratio]{figures/Chapter_4_Fig/ER3.jpeg}
+    \caption{Analytics Results Table}
+    \label{fig:er_analytics_results}
+\end{figure}
 
 %% ----------------------------------------------------------------
