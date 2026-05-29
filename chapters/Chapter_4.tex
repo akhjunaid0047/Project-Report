@@ -109,8 +109,18 @@ Before features are extracted and embedded, raw textual data from alumni surveys
 
 \textbf{Input Corpora}
 \begin{enumerate}
-    \item \textbf{Alumni Free-Text}: Extracted from 8 NLP target survey fields (job\_responsibilities, tools\_software, skills\_helped\_land\_job, skills\_missing\_from\_curriculum, skills\_acquired\_after\_graduation, unused\_subjects, certifications\_completed, suggestions\_for\_improvement).
-    \item \textbf{Syllabus PDF Text}: Extracted via pdfplumber and structured by \texttt{nlp\_engine/syllabus\_parser.py} (Unit headers, Learning Objectives, Topic breakdowns).
+    \item \textbf{Alumni Free-Text}: Extracted from 8 NLP target survey fields:
+    \begin{itemize}
+        \item \texttt{job\_responsibilities}
+        \item \texttt{tools\_software}
+        \item \texttt{skills\_helped\_land\_job}
+        \item \texttt{skills\_missing\_from\_curriculum}
+        \item \texttt{skills\_acquired\_after\_graduation}
+        \item \texttt{unused\_subjects}
+        \item \texttt{certifications\_completed}
+        \item \texttt{suggestions\_for\_improvement}
+    \end{itemize}
+    \item \textbf{Syllabus PDF Text}: Extracted via pdfplumber and structured by \texttt{nlp\_engine/\allowbreak syllabus\_parser.py} (Unit headers, Learning Objectives, Topic breakdowns).
 \end{enumerate}
 
 \textbf{Processing Steps (spaCy)}
@@ -240,7 +250,7 @@ The AI flags syllabus topics applying the following deterministic thresholds:
     \item Action: Triggers a recommendation to inject the skill into the revised syllabus.
 \end{itemize}
 
-\textit{Type: REDUCE --- Topic-Driven, Evidence-Positive} --- The earlier absence-of-evidence approach (reducing topics simply because alumni did not mention them) was removed, as it often produced false positives for foundational subjects. The revised rule follows an evidence-positive approach: a topic is recommended for reduction only when alumni explicitly report that they never used it in practice.
+\textit{Type: REDUCE --- Topic-Driven, Evidence-Positive} --- A syllabus topic is recommended for reduction only when alumni explicitly report that they never used it in practice. This evidence-positive rule avoids the false positives that arise when foundational topics are simply absent from open-ended survey responses.
 \begin{itemize}
     \item There exists an alumni skill $S$ whose best-matching syllabus topic $T$ in course $C$ has $\text{similarity}(S, T) \geq \texttt{TOPIC\_MATCH\_FLOOR}$ (0.45), i.e., the topic clearly maps to that skill.
     \item AND the unused ratio of $S$ (share of $S$'s alumni mentions that came from the \texttt{unused\_subjects} survey field) is $\geq \texttt{UNUSED\_RATIO\_THRESHOLD}$ (0.50, i.e., $\geq 50\%$).
@@ -250,11 +260,10 @@ The AI flags syllabus topics applying the following deterministic thresholds:
 
 \textit{Type: EMERGING --- Recency-Boosted ADD} --- EMERGING is not a separate classification category; it represents an ADD recommendation whose ranking is boosted by a recency weight $W_{\text{recency}} = 1.5$. This boost is applied when the underlying skill was primarily acquired after graduation across the alumni cohort. The recommendation is additionally tagged in the UI so administrators can identify the reason for its elevated ranking.
 
-\textit{Type: OVERHAUL --- Bottom-Percentile Courses} --- OVERHAUL was previously decided per-course inside \texttt{recommendation\_engine.py} from an absolute CRS threshold. It is now decided in \texttt{tasks.py} at the analytics-run level using a relative bottom-percentile cut across all courses in the run. This avoids both false positives in strong departments and false negatives in weak ones.
+\textit{Type: OVERHAUL --- Bottom-Percentile Courses} --- OVERHAUL is decided at the analytics-run level using a relative bottom-percentile cut across all courses in the run, rather than an absolute CRS threshold. This avoids both false positives in strong departments and false negatives in weak ones.
 \begin{itemize}
-    \item Condition (in \texttt{tasks.py}): course's CRS lies in the bottom percentile across the run.
+    \item Condition: the course's CRS lies in the bottom percentile across the run.
     \item Action: Flags the entire course for committee review rather than isolated patch revisions.
-    \item The constant \texttt{OVERHAUL\_THRESHOLD\_FLOOR} = 0.50 remains in \texttt{recommendation\_engine.py} as documentation only.
 \end{itemize}
 
 \subsection{LLM Domain Filter}
